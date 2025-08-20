@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Flutter External Auth</title>
+		<style>
+			body {
+				background-color: #333;
+				padding-top: 3rem;
+
+				div {
+					display: flex;
+					flex-direction: column;
+					gap: 2rem;
+					justify-content: center;
+					align-items: center;
+					color: white;
+				}
+			}
+
+			#title {
+				font-size: xx-large;
+			}
+
+			#username-div,
+			#password-div {
+				display: flex;
+				gap: 1rem;
+				flex-direction: row;
+			}
+
+			#login-button {
+				padding: 0.5rem 1rem;
+				background-color: #45f045;
+				font-weight: bold;
+				border: none;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<p id="title">Website Login Screen</p>
+			<div id="username-div">
+				<p>Username:</p>
+				<input id="username" type="text" />
+			</div>
+			<div id="password-div">
+				<p>Password:</p>
+				<input id="password" type="text" />
+			</div>
+			<button id="login-button" type="button">Login</button>
+		</div>
+	</body>
+
+	<script>
+		const btn = document.getElementById("login-button");
+		const username = document.getElementById("username");
+		const password = document.getElementById("password");
+		btn.addEventListener("click", () => {
+			console.log("Login button clicked!!");
+			console.log("username:", username.value);
+			console.log("password:", password.value);
+		});
+	</script>
+</html>

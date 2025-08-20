@@ -1,3 +1,4 @@
+import 'package:app/HomePage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,6 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter External Auth Demo', home: Container());
+    return MaterialApp(title: 'Flutter External Auth Demo', home: HomePage());
   }
 }

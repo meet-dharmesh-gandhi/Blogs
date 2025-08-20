@@ -17,7 +17,11 @@ class _HomePage extends State<HomePage> {
     return Column(
       children: [
         Text("Home Page!"),
-        if (!isLoggedIn) LoginScreen(),
+        if (!isLoggedIn)
+          LoginScreen(
+            setIsLoggedIn:
+                (bool newValue) => setState(() => isLoggedIn = newValue),
+          ),
         if (isLoggedIn) MainScreen(),
       ],
     );

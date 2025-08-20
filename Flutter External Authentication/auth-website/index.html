@@ -58,10 +58,32 @@
 		const btn = document.getElementById("login-button");
 		const username = document.getElementById("username");
 		const password = document.getElementById("password");
+		let port;
 		btn.addEventListener("click", () => {
 			console.log("Login button clicked!!");
 			console.log("username:", username.value);
 			console.log("password:", password.value);
+			// send this info to server and get the token
+			// mock token
+			const tokenFromServer = "token";
+			fetch(`http://localhost:${port}?token=${tokenFromServer}&username=${username.value}`)
+				.then((data) => {
+					console.log("response status:", data.status);
+					return data.json();
+				})
+				.then((data) => {
+					console.log("data:", data);
+				});
+		});
+
+		document.addEventListener("DOMContentLoaded", () => {
+			const queryParams = new URLSearchParams(window.location.search);
+			if (queryParams.get("port")) {
+				// got the port!
+				port = queryParams.get("port");
+			} else {
+				alert("Did not get the port!!");
+			}
 		});
 	</script>
 </html>

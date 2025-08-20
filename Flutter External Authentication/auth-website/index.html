@@ -59,6 +59,7 @@
 		const username = document.getElementById("username");
 		const password = document.getElementById("password");
 		let port;
+		let redirectTo;
 		btn.addEventListener("click", () => {
 			console.log("Login button clicked!!");
 			console.log("username:", username.value);
@@ -66,14 +67,20 @@
 			// send this info to server and get the token
 			// mock token
 			const tokenFromServer = "token";
-			fetch(`http://localhost:${port}?token=${tokenFromServer}&username=${username.value}`)
-				.then((data) => {
-					console.log("response status:", data.status);
-					return data.json();
-				})
-				.then((data) => {
-					console.log("data:", data);
-				});
+			if (port) {
+				fetch(
+					`http://localhost:${port}?token=${tokenFromServer}&username=${username.value}`
+				)
+					.then((data) => {
+						console.log("response status:", data.status);
+						return data.json();
+					})
+					.then((data) => {
+						console.log("data:", data);
+					});
+			} else if (redirectTo) {
+				window.location.href = `${redirectTo}://auth-callback?token=${tokenFromServer}&username=${username.value}`;
+			}
 		});
 
 		document.addEventListener("DOMContentLoaded", () => {
@@ -81,6 +88,8 @@
 			if (queryParams.get("port")) {
 				// got the port!
 				port = queryParams.get("port");
+			} else if (queryParams.get("redirectTo")) {
+				redirectTo = queryParams.get("redirectTo");
 			} else {
 				alert("Did not get the port!!");
 			}

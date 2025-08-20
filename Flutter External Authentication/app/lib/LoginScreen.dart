@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'dart:io';
-
+import 'package:app_links/app_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,10 +15,38 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  final AppLinks _appLinks = AppLinks();
+  StreamSubscription? sub;
+
+  Future<void> handleRedirectOnMobile() async {
+    // use app links instead:
+    sub = _appLinks.uriLinkStream.listen((url) async {
+      // check token is correct or not
+      final token = url.queryParameters['token']; // get the token from the url
+      final username =
+          url.queryParameters['username']; // get the username from the url
+      if (token != null && username != null) {
+        // both of them are present
+        // now we verify the token and the username with the server
+        // this step will be done later
+        widget.setIsLoggedIn(true);
+      } else {
+        print("Login failed!!");
+      }
+    });
+  }
+
   Future<void> redirectToWebAuth() async {
-    final Uri uriWithParams = Uri.parse("http://localhost:3000?port=56430");
+    final isMobile = Platform.isAndroid || Platform.isIOS;
+    final Uri uriWithParams = Uri.parse(
+      "http://192.168.29.191:3000?${isMobile ? "redirectTo=external-auth-app" : "port=56430"}",
+    );
     if (!await launchUrl(uriWithParams, mode: LaunchMode.externalApplication)) {
       print("Failed to launch the url!");
+    }
+    if (Platform.isAndroid || Platform.isIOS) {
+      // ensure nothing below happens in a mobile device
+      return;
     }
     final tokenIsCorrect = await listen();
     if (tokenIsCorrect) {
@@ -73,7 +102,14 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   void initState() {
+    handleRedirectOnMobile();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    sub?.cancel();
+    super.dispose();
   }
 
   @override
